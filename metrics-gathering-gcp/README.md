@@ -1,7 +1,7 @@
 ## Example
 An example for fetching metrics is given below
 ```python
-from smart_kube.metrics.gcp_monitoring_query import MonitoringQuery
+from smart_vpa.metrics.gcp_monitoring_query import MonitoringQuery
 # init by specifying each project
 mq = MonitoringQuery(project_id='sandbox-ba851a37')
 # define which metrics to fetch

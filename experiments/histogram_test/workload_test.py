@@ -3,7 +3,7 @@ import os
 import sys
 import pickle
 
-from smart_kube.util import Histogram
+from smart_vpa.util import Histogram
 
 # get an absolute path to the directory that contains parent files
 project_dir = os.path.dirname(os.path.join(os.getcwd(), __file__))

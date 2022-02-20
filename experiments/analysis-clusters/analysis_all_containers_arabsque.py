@@ -2,7 +2,7 @@ import pickle
 import numpy as np
 import os
 import sys
-from smart_kube.recommender_initial import Builtin
+from smart_vpa.recommender_initial import Builtin
 
 # get an absolute path to the directory that contains parent files
 project_dir = os.path.dirname(os.path.join(os.getcwd(), __file__))

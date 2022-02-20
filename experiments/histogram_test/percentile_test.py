@@ -1,6 +1,6 @@
 import numpy as np
 
-from smart_kube.util import Histogram
+from smart_vpa.util import Histogram
 
 # ------------- histogram test --------------
 #  to percentiles on the following histogram: { 1: 1, 2: 2, 3: 3, 4: 4 }.

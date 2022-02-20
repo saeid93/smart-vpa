@@ -4,7 +4,7 @@ import pickle
 import json
 import click
 from pprint import PrettyPrinter
-from smart_kube.workload import SyntheticWorkloadGenerator
+from smart_vpa.workload import SyntheticWorkloadGenerator
 
 # get an absolute path to the directory that contains parent files
 project_dir = os.path.dirname(os.path.join(os.getcwd(), __file__))

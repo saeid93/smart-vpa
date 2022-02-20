@@ -2,9 +2,9 @@
    for pod creation
 """
 
-from smart_kube import Cluster
+from smart_vpa import Cluster
 from time import sleep
-from smart_kube.cluster import clean_all_namespaces
+from smart_vpa.cluster import clean_all_namespaces
 
 
 clean_all_namespaces()

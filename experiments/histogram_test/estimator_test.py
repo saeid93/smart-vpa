@@ -1,4 +1,4 @@
-from smart_kube.util import (
+from smart_vpa.util import (
     Histogram,
     Estimator,
     cores_to_millicores,

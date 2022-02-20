@@ -5,7 +5,7 @@ from collections import Counter
 import json
 import matplotlib.pyplot as plt
 from copy import deepcopy
-from smart_kube.util import Histogram, plot_histogram
+from smart_vpa.util import Histogram, plot_histogram
 
 # get an absolute path to the directory that contains parent files
 project_dir = os.path.dirname(os.path.join(os.getcwd(), __file__))

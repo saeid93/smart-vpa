@@ -3,8 +3,8 @@ import sys
 import pickle
 import numpy as np
 import json
-from smart_kube.recommender_initial import Builtin
-from smart_kube.util import (
+from smart_vpa.recommender_initial import Builtin
+from smart_vpa.util import (
     logger,
     plot_slack
     )

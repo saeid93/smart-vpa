@@ -1,4 +1,4 @@
-from smart_kube.util import Histogram
+from smart_vpa.util import Histogram
 
 # ------------- test histogram option --------------
 #  based-on:

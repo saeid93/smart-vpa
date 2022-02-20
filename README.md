@@ -4,7 +4,7 @@ This repository contains the code of a smart (ML-based) Kuberntest vertical pod 
 
 ## General Project Structure
 The project consists of three parts:
-1. [smart_kube](smart_kube): The library for implementation of the simulator, emulator and backend Kubernetes wrappers and the vpa recommender, simulator, emulator and updater.
+1. [smart_vpa](smart_vpa): The library for implementation of the simulator, emulator and backend Kubernetes wrappers and the vpa recommender, simulator, emulator and updater.
 2. [experiments](experiments): The directory consisting all the client codes e.g. triggering learning algorithms in the vpa library, saving and loading models and scripts for checking simulator and a learned agent etc.
 3. [stress-dockerfiles](stress-dockerfiles) stress testing docker images.
 4. [crd](crd): crd version of the implementations TODO.
@@ -16,7 +16,7 @@ The project consists of three parts:
    1. [Kubernetes open source autoscaler installation](https://cloud.google.com/kubernetes-engine/docs/how-to/vertical-pod-autoscaling)
    2. [Google cloud installation](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler)
 
-2. Go to the [/smart_kube](./smart_kube) and install the framework in editable mode
+2. Go to the [/smart_vpa](./smart_vpa) and install the framework in editable mode
    ```
    pip install -e .
    ```
@@ -26,7 +26,7 @@ The project consists of three parts:
 
 6. Go to [/experiments/utils/constants.py](/experiments/utils/constants.py) and set the path to your data and project folders in the file. For example:
    ```
-   DATA_PATH = "/Users/saeid/Codes/arabesque/smart-kube/data"
+   DATA_PATH = "/Users/saeid/Codes/arabesque/smart-vpa/data"
    ```
 
 
@@ -60,7 +60,7 @@ At each timestep the simulation/Emulations
 | :--: |
 | *vpa model* |
 
-## Environment ([smart_kube](smart_kube))
+## Environment ([smart_vpa](smart_vpa))
 ### Simulations
 The simulator uses the OpenAI gym interface as explained above. however, the resource usages are represented in a numpy array rather than actully having a container running in the background.
 
@@ -78,7 +78,7 @@ To make the mentioend method into a real-world VPA we have used Kubernetes [Cust
 TODO write it after implementation
 
 ## Implemented vertical pod autoscalers ([vpa](vpa))
-All the algorithms are inherited following the [vpa interface](smart_kube/src/smart_kube/vpa) implemented in the smart_kube library
+All the algorithms are inherited following the [vpa interface](smart_vpa/src/smart_vpa/vpa) implemented in the smart_vpa library
 
 1. built-in predictor: Using weigthed histogram of recent resource usages algorithm explained [here](https://povilasv.me/vertical-pod-autoscaling-the-definitive-guide/) and [here](https://research.google/pubs/pub49065/). This is a Python implementation of the [recommender code](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler/pkg/recommender) in the [Kubernetes built-in vertical pod autoscaler](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler). TODO
 

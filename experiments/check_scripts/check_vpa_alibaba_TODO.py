@@ -7,15 +7,15 @@ import numpy as np
 
 import gym
 
-import smart_kube # noqa
-from smart_kube.recommender import (
+import smart_vpa # noqa
+from smart_vpa.recommender import (
     Threshold,
     Random,
     Builtin,
     RL,
     LSTM
 )
-from smart_kube.util import logger
+from smart_vpa.util import logger
 
 # get an absolute path to the directory that contains parent files
 project_dir = os.path.dirname(os.path.join(os.getcwd(), __file__))
