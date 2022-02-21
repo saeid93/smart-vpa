@@ -12,21 +12,55 @@ from typing import Union, Any, Dict
 project_dir = os.path.dirname(os.path.join(os.getcwd(), __file__))
 sys.path.append(os.path.normpath(os.path.join(project_dir, '..', '..')))
 
-from experiments.utils.constants import DATASETS_PATH
+from experiments.utils.constants import (
+    DATASETS_PATH,
+    WORKLOADS_PATH,
+    CONFIGS_PATH
+    )
 
 
-def add_path_to_config_edge(
-    config: Dict[str, Any], dataset_id: int, workload_id: int,
-    network_id: int,trace_id: int) -> Dict[str, Any]:
+def build_config(
+    workload_id: int,
+    seed: int,
+    round_robin: bool) -> Dict[str, Any]:
 
-    dataset_path = os.path.join(DATASETS_PATH, str(dataset_id))
-    workload_path = os.path.join(dataset_path, 'workloads', str(workload_id))
-    network_path = os.path.join(dataset_path, 'networks', str(network_id))
-    trace_path = os.path.join(network_path, 'traces', str(trace_id))
+
+    config: dict = {}
+    workload: np.array = np.array([])
+    time: np.array = np.array([])
+    workload_path = os.path.join(
+        WORKLOADS_PATH, 'synthetic', str(workload_id))
+
+    # load container config
+    # container initial requests and limits
+    container_file_path = os.path.join(workload_path, "container.json")
+    try:
+        with open(container_file_path) as cf:
+            config = json.loads(cf.read())
+    except FileNotFoundError:
+        print(f"workload {workload_id} does not have a container")
+
+    # load the workoad
+    workload_file_path = os.path.join(workload_path, 'workload.pickle')
+    try:
+        with open(workload_file_path, 'rb') as in_pickle:
+            workload = pickle.load(in_pickle)
+    except FileNotFoundError:
+        raise Exception(f"workload {workload_id} does not exists")
+
+    # load the time array of the workload
+    time_file_path = os.path.join(workload_path, 'time.pickle')
+    try:
+        with open(time_file_path, 'rb') as in_pickle:
+            time = pickle.load(in_pickle)
+    except FileNotFoundError:
+        raise Exception(f"workload {workload_id} does not have time array")
+
+    # -------------- make the environment --------------
+    # update the passed config to the environment
     config.update({
-        'dataset_path': os.path.join(dataset_path, 'dataset.pickle'),
-        'workload_path': os.path.join(workload_path, 'workload.pickle'),
-        'network_path':\
-            os.path.join(network_path, 'edge_simulator_config.pickle'),
-        'trace_path': os.path.join(trace_path, 'trace.pickle')})
+        'workload': workload,
+        'seed': seed,
+        'round-robin': round_robin,
+        'time': time})
     return config

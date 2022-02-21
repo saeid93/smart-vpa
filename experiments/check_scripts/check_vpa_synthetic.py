@@ -15,16 +15,17 @@ from smart_vpa.recommender import (
     RL,
     LSTM
 )
-from smart_vpa.util import logger
+from smart_vpa.util import (
+    logger)
 
 # get an absolute path to the directory that contains parent files
 project_dir = os.path.dirname(os.path.join(os.getcwd(), __file__))
 sys.path.append(os.path.normpath(os.path.join(project_dir, '..', '..')))
 
 from experiments.utils.constants import ( # noqa
-    CONFIGS_PATH,
-    WORKLOADS_PATH
+    CONFIGS_PATH
 )
+from experiments.utils import build_config
 
 
 def check_env(env, recommender):
@@ -38,7 +39,7 @@ def check_env(env, recommender):
         action = recommender.recommender()
         observation, reward, done, info = env.step(action)
         log_action = {
-            "memory": action[[0, 2, 4]].tolist(),
+            "memory": action[[0, 2, 4]].tolist(), # Y
             "cpu": action[[1, 3, 5]].tolist()
         }
         logger.info(log_action)
@@ -66,44 +67,10 @@ def main(
     """
     """
     # -------------- load container config and workload --------------
-    config: dict = {}
-    workload: np.array = np.array([])
-    time: np.array = np.array([])
-    workload_path = os.path.join(
-        WORKLOADS_PATH, 'synthetic', str(workload_id))
-
-    # load container config
-    # container initial requests and limits
-    container_file_path = os.path.join(workload_path, "container.json")
-    try:
-        with open(container_file_path) as cf:
-            config = json.loads(cf.read())
-    except FileNotFoundError:
-        print(f"workload {workload_id} does not have a container")
-
-    # load the workoad
-    workload_file_path = os.path.join(workload_path, 'workload.pickle')
-    try:
-        with open(workload_file_path, 'rb') as in_pickle:
-            workload = pickle.load(in_pickle)
-    except FileNotFoundError:
-        raise Exception(f"workload {workload_id} does not exists")
-
-    # load the time array of the workload
-    time_file_path = os.path.join(workload_path, 'time.pickle')
-    try:
-        with open(time_file_path, 'rb') as in_pickle:
-            time = pickle.load(in_pickle)
-    except FileNotFoundError:
-        raise Exception(f"workload {workload_id} does not have time array")
-
-    # -------------- make the environment --------------
-    # update the passed config to the environment
-    config.update({
-        'workload': workload,
-        'seed': seed,
-        'round-robin': round_robin,
-        'time': time})
+    config = build_config(
+        workload_id=workload_id,
+        seed=seed,
+        round_robin=round_robin)
 
     # picking the right environment
     type_env = {

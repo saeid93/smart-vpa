@@ -1,12 +1,16 @@
 import os
-from mobile_kube.envs import (
-    SimEdgeEnv,
-    SimBinpackingEnv,
-    SimGreedyEnv,
-    KubeEdgeEnv,
-    KubeBinpackingEnv,
-    KubeGreedyEnv
+from smart_vpa.envs import (
+    SimEnv,
+    KubeEnv
 )
+# from mobile_kube.envs import (
+#     SimEdgeEnv,
+#     SimBinpackingEnv,
+#     SimGreedyEnv,
+#     KubeEdgeEnv,
+#     KubeBinpackingEnv,
+#     KubeGreedyEnv
+# )
 
 # dfined by the user
 DATA_PATH = "/Users/saeid/Codes/smart-vpa/smart-vpa/data"
@@ -31,19 +35,6 @@ FINAL_STATS_PATH = os.path.join(
 )
 
 ENVS = {
-    'sim-edge': SimEdgeEnv,
-    'sim-binpacking': SimBinpackingEnv,
-    'sim-greedy': SimGreedyEnv,
-    'kube-edge': KubeEdgeEnv,
-    'kube-binpacking': KubeBinpackingEnv,
-    'kube-greedy': KubeGreedyEnv
-}
-
-ENVSMAP = {
-    'sim-edge': 'SimEdgeEnv-v0',
-    'sim-binpacking': 'SimBinpackingEnv-v0',
-    'sim-greedy': 'SimGreedyEnv-v0',
-    'kube-edge': 'KubeEdgeEnv-v0',
-    'kube-binpacking': 'KubeBinpackingEnv-v0',
-    'kube-greedy': 'KubeGreedyEnv-v0',
+    'sim': SimEnv,
+    'kube': KubeEnv
 }

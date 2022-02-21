@@ -76,9 +76,9 @@ class SimEnv(gym.Env):
         # self._check_config(config)
 
         # set up the seeds for reproducable resutls
-        self.seed: int = config['seed']
-        np.random.seed(self.seed)
-        self.np_random = seeding.np_random(self.seed)
+        self.seed(config['seed'])
+        # np.random.seed(self.seed)
+        # self.np_random = seeding.np_random(self.seed)
 
         # time variable (for computing clock time in simulation
         # and reading metrics in the emulations)
@@ -154,6 +154,13 @@ class SimEnv(gym.Env):
         }
         logger.info(yaml.dump(initial_observation,
                               default_flow_style=False))
+
+    def seed(self, seed):
+        np.random.seed(seed)
+        self.np_random, seed = seeding.np_random(seed)
+        self._env_seed = seed
+        self.base_env_seed = seed
+        return [seed]
 
     def reset(self):
         """Resets the environment to an initial state and returns an initial

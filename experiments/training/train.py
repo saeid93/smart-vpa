@@ -19,7 +19,7 @@ from experiments.utils.constants import (
     CONFIGS_PATH,
 )
 from experiments.utils import (
-    add_path_to_config_edge,
+    build_config,
     make_env_class,
     CloudCallback
 )
@@ -28,10 +28,12 @@ torch, nn = try_import_torch()
 
 
 def learner(*, config_file_path: str, config: Dict[str, Any],
-            series: int, type_env: str, dataset_id: int,
-            workload_id: int, network_id: int, trace_id: int,
-            use_callback: bool, checkpoint_freq: int,
-            local_mode: bool):
+            series: int, type_env: str,
+            workload_id: int,
+            use_callback: bool, round_robin:bool,
+            checkpoint_freq: int,
+            local_mode: bool,
+            seed: int):
     """
     input_config: {"env_config_base": ...,
                     "run_or_experiment": ...,
@@ -58,16 +60,12 @@ def learner(*, config_file_path: str, config: Dict[str, Any],
     stop = config['stop']
     learn_config = config['learn_config']
     run_or_experiment = config["run_or_experiment"]
-    env_config_base = config['env_config_base']
 
     # add the additional nencessary arguments to the edge config
-    env_config = add_path_to_config_edge(
-        config=env_config_base,
-        dataset_id=dataset_id,
+    env_config = build_config(
         workload_id=workload_id,
-        network_id=network_id,
-        trace_id=trace_id
-    )
+        seed=seed,
+        round_robin=round_robin)
 
     # generate the ray_config
     # make the learning config based on the type of the environment
@@ -83,10 +81,7 @@ def learner(*, config_file_path: str, config: Dict[str, Any],
     experiments_folder = os.path.join(TRAIN_RESULTS_PATH,
                                       "series",     str(series),
                                       "envs",       str(type_env),
-                                      "datasets",   str(dataset_id),
                                       "workloads",  str(workload_id),
-                                      "networks",   str(network_id),
-                                      "traces",     str(trace_id),
                                       "experiments")
     # make the base path if it does not exists
     if not os.path.isdir(experiments_folder):
@@ -141,22 +136,20 @@ def learner(*, config_file_path: str, config: Dict[str, Any],
 
 
 @click.command()
-@click.option('--local-mode', type=bool, default=False)
+@click.option('--local-mode', type=bool, default=True)
 @click.option('--config-file', type=str, default='A2C')
 @click.option('--series', required=True, type=int, default=70)
 @click.option('--type-env', required=True,
-              type=click.Choice(['sim-edge', 'sim-binpacking', 'sim-edge-greedy',
-                                 'CartPole-v0', 'Pendulum-v0']),
-              default='sim-edge')
-@click.option('--dataset-id', required=True, type=int, default=6)
-@click.option('--workload-id', required=True, type=int, default=0)
-@click.option('--network-id', required=False, type=int, default=0)
-@click.option('--trace-id', required=False, type=int, default=0)
+              type=click.Choice(['sim', 'kube']),
+              default='sim')
+@click.option('--workload-id', required=True, type=int, default=1)
+@click.option('--round-robin', required=True, type=bool, default=True)
 @click.option('--use-callback', required=True, type=bool, default=True)
 @click.option('--checkpoint-freq', required=False, type=int, default=1000)
+@click.option('--seed', required=False, type=int, default=1000)
 def main(local_mode: bool, config_file: str, series: int,
-         type_env: str, dataset_id: int, workload_id: int, network_id: int,
-         trace_id: int, use_callback: bool, checkpoint_freq: int):
+         type_env: str, workload_id: int, round_robin: bool,
+         use_callback: bool, checkpoint_freq: int, seed: int):
     """[summary]
 
     Args:
@@ -182,10 +175,11 @@ def main(local_mode: bool, config_file: str, series: int,
 
     learner(config_file_path=config_file_path,
             config=config, series=series,
-            type_env=type_env, dataset_id=dataset_id,
-            workload_id=workload_id, network_id=network_id,
-            trace_id=trace_id, use_callback=use_callback,
-            checkpoint_freq=checkpoint_freq, local_mode=local_mode)
+            type_env=type_env,
+            workload_id=workload_id,
+            round_robin=round_robin, use_callback=use_callback,
+            checkpoint_freq=checkpoint_freq, local_mode=local_mode,
+            seed=seed)
 
 
 if __name__ == "__main__":
