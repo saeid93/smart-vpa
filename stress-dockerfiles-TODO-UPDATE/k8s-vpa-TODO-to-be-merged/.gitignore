@@ -1,0 +1,6 @@
+.idea
+.venv
+data/*
+temp.*
+tmp.*
+kube.conf
