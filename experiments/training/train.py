@@ -144,7 +144,7 @@ def learner(*, config_file_path: str, config: Dict[str, Any],
               default='sim')
 @click.option('--workload-id', required=True, type=int, default=1)
 @click.option('--round-robin', required=True, type=bool, default=True)
-@click.option('--use-callback', required=True, type=bool, default=True)
+@click.option('--use-callback', required=True, type=bool, default=False)
 @click.option('--checkpoint-freq', required=False, type=int, default=1000)
 @click.option('--seed', required=False, type=int, default=1000)
 def main(local_mode: bool, config_file: str, series: int,

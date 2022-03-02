@@ -256,7 +256,7 @@ class SimEnv(gym.Env):
             self.limit_range_max))
         observation_space = Box(
             low=obs_lower_bound, high=obs_upper_bound,
-            shape=(4,), dtype=float)
+            shape=(4,), dtype=np.float32)
 
         # action space
         act_lower_bound = np.array(
@@ -265,9 +265,13 @@ class SimEnv(gym.Env):
         act_upper_bound = np.array(
             self.limit_range_max.tolist() * 3
             )
+
+        # action_space = Box(
+        #     low=act_lower_bound, high=act_upper_bound,
+        #     shape=(6,), dtype=np.float32) 
         action_space = RecommenderSpace(
             low=act_lower_bound, high=act_upper_bound,
-            shape=(6,), dtype=float)
+            shape=(6,), dtype=np.float32)
         return observation_space, action_space
 
     # def _check_config(self, config):

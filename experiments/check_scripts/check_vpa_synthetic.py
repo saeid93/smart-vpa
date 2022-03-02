@@ -54,7 +54,7 @@ def check_env(env, recommender):
               type=click.Choice(['builtin', 'random', 'threshold',
                                  'lstm', 'rl']),
               default='builtin')
-@click.option('--workload-id', required=True, type=int, default=1)
+@click.option('--workload-id', required=True, type=int, default=2)
 @click.option('--round-robin', required=True, type=bool, default=True)
 @click.option('--seed', required=True, type=int, default=100)
 def main(
