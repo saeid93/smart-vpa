@@ -138,7 +138,7 @@ def learner(*, config_file_path: str, config: Dict[str, Any],
 @click.command()
 @click.option('--local-mode', type=bool, default=True)
 @click.option('--config-file', type=str, default='A2C')
-@click.option('--series', required=True, type=int, default=70)
+@click.option('--series', required=True, type=int, default=71)
 @click.option('--type-env', required=True,
               type=click.Choice(['sim', 'kube']),
               default='sim')
