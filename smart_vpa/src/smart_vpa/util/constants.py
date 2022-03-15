@@ -11,7 +11,7 @@ LIMIT_RANGE = {
         "cpu": 0
         },
     "max_limit_request_ratio": {
-        "memory": 10,
-        "cpu": 10
+        "memory": 100,
+        "cpu": 100
         }
 }

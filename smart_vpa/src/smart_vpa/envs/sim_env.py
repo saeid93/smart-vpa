@@ -74,34 +74,38 @@ class SimEnv(gym.Env):
         # check if the config is in the right format
         super().__init__()
         # self._check_config(config)
+        self.config = config
         self.current_container = 0
         self.total_containers = len(config['container_name'])
+        self.setup_next_container()
 
         # set up the seeds for reproducable resutls
-        self.seed(config['seed'][self.current_container])
+
+    def setup_next_container(self):
+        self.seed(self.config['seed'][self.current_container])
         # np.random.seed(self.seed)
         # self.np_random = seeding.np_random(self.seed)
 
         # time variable (for computing clock time in simulation
         # and reading metrics in the emulations)
-        self.time = config['time'][self.current_container]
+        self.time = self.config['time'][self.current_container]
 
         # container name
-        self.container_name: str = config['container_name'][self.current_container]
+        self.container_name: str = self.config['container_name'][self.current_container]
 
         # initail resource requests
         self.initial_requests = np.zeros(2)
-        self.initial_requests[0] = config[
+        self.initial_requests[0] = self.config[
             'requests'][self.current_container]['memory']
-        self.initial_requests[1] = config[
+        self.initial_requests[1] = self.config[
             'requests'][self.current_container]['cpu']
         self.requests = self.initial_requests.copy()
 
         # initial resource limits
         self.initial_limits = np.zeros(2)
-        self.initial_limits[0] = config[
+        self.initial_limits[0] = self.config[
             'limits'][self.current_container]['memory']
-        self.initial_limits[1] = config[
+        self.initial_limits[1] = self.config[
             'limits'][self.current_container]['cpu']
         self.limits = self.initial_limits.copy()
 
@@ -120,25 +124,25 @@ class SimEnv(gym.Env):
 
         # whether we want to end at the end of the workload
         # or start over from the begining
-        self.round_robin: bool = config['round-robin']
+        self.round_robin: bool = self.config['round-robin']
 
         # ratio of the request to limit
         # (constant and stays the same during the experimetns)
         self.limit_request_ratio =\
             self.initial_limits/self.initial_requests
 
-        # kubernetes value checks
-        self._kubernetes_checks()
-
         # initiate the observation and action space
         self.observation_space, self.action_space =\
             self._setup_space()
+
+        # kubernetes value checks
+        self._kubernetes_checks()
 
         # workload of resources usage
         # resource usage        timestep
         # ram (in megabayes) |    ...     |
         # cpu (in milicores) |    ...     |
-        self.workload: np.array = config['workload'][self.current_container]
+        self.workload: np.array = self.config['workload'][self.current_container]
         self.total_timesteps = self.workload.shape[1]
         self.timestep = 0
         self.global_timestep = 0
@@ -160,6 +164,9 @@ class SimEnv(gym.Env):
         }
         logger.info(yaml.dump(initial_observation,
                               default_flow_style=False))
+
+
+
 
     def seed(self, seed):
         np.random.seed(seed)
@@ -212,6 +219,7 @@ class SimEnv(gym.Env):
               f"workload timestep: {self.timestep}\n",
               f"total timesteps: {self.global_timestep}\n",
               30*'=', '\n')
+
         print(15*'-', " action ", 15*'-')
         print(yaml.dump(self.action_formatted,
                         default_flow_style=False))
@@ -522,11 +530,16 @@ class SimEnv(gym.Env):
         """check if the agent is at a finish state or not
         """
         done = False
-        if not self.round_robin:
-            if self.timestep == self.total_timesteps-1:
-                done = True
+        if self.timestep == self.total_timesteps-1:
+            if self.current_container != self.total_containers - 1:
+                self.current_container += 1
+                self.setup_next_container()
+            else:
+                if self.round_robin[self.current_container]: # TODO fix round-robin concept
+                    self.current_container = 0
+                    self.setup_next_container()
         return done
-
+ 
     @property
     def info(self):
         """info dictionary for the step function
