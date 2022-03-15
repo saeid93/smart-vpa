@@ -74,29 +74,35 @@ class SimEnv(gym.Env):
         # check if the config is in the right format
         super().__init__()
         # self._check_config(config)
+        self.current_container = 0
+        self.total_containers = len(config['container_name'])
 
         # set up the seeds for reproducable resutls
-        self.seed(config['seed'])
+        self.seed(config['seed'][self.current_container])
         # np.random.seed(self.seed)
         # self.np_random = seeding.np_random(self.seed)
 
         # time variable (for computing clock time in simulation
         # and reading metrics in the emulations)
-        self.time = config['time']
+        self.time = config['time'][self.current_container]
 
         # container name
-        self.container_name: str = config['container_name']
+        self.container_name: str = config['container_name'][self.current_container]
 
         # initail resource requests
         self.initial_requests = np.zeros(2)
-        self.initial_requests[0] = config['requests']['memory']
-        self.initial_requests[1] = config['requests']['cpu']
+        self.initial_requests[0] = config[
+            'requests'][self.current_container]['memory']
+        self.initial_requests[1] = config[
+            'requests'][self.current_container]['cpu']
         self.requests = self.initial_requests.copy()
 
         # initial resource limits
         self.initial_limits = np.zeros(2)
-        self.initial_limits[0] = config['limits']['memory']
-        self.initial_limits[1] = config['limits']['cpu']
+        self.initial_limits[0] = config[
+            'limits'][self.current_container]['memory']
+        self.initial_limits[1] = config[
+            'limits'][self.current_container]['cpu']
         self.limits = self.initial_limits.copy()
 
         # limit ranges
@@ -132,7 +138,7 @@ class SimEnv(gym.Env):
         # resource usage        timestep
         # ram (in megabayes) |    ...     |
         # cpu (in milicores) |    ...     |
-        self.workload: np.array = config['workload']
+        self.workload: np.array = config['workload'][self.current_container]
         self.total_timesteps = self.workload.shape[1]
         self.timestep = 0
         self.global_timestep = 0

@@ -30,7 +30,11 @@ torch, nn = try_import_torch()
 def learner(*, config_file_path: str, config: Dict[str, Any],
             series: int, type_env: str,
             workload_id: int,
-            use_callback: bool, round_robin:bool,
+            workload_type: str,
+            workload_full_path: str,
+            workload_bunch: int,
+            use_callback: bool,
+            round_robin:bool,
             checkpoint_freq: int,
             local_mode: bool,
             seed: int):
@@ -64,8 +68,12 @@ def learner(*, config_file_path: str, config: Dict[str, Any],
     # add the additional nencessary arguments to the edge config
     env_config = build_config(
         workload_id=workload_id,
+        workload_type=workload_type,
+        workload_full_path=workload_full_path,
+        workload_bunch=workload_bunch,
         seed=seed,
-        round_robin=round_robin)
+        round_robin=round_robin,
+        )
 
     # generate the ray_config
     # make the learning config based on the type of the environment
@@ -143,13 +151,22 @@ def learner(*, config_file_path: str, config: Dict[str, Any],
               type=click.Choice(['sim', 'kube']),
               default='sim')
 @click.option('--workload-id', required=True, type=int, default=1)
+@click.option('--workload-type', required=True,
+              type=click.Choice(['alibaba', 'synthetic', 'arabesque']),
+              default='arabesque')
+@click.option('--workload-full-path', required=True, type=str,
+              default='engine-top-ten/engine')
+@click.option('--workload-bunch', required=True, type=int,
+              default=10)
 @click.option('--round-robin', required=True, type=bool, default=True)
 @click.option('--use-callback', required=True, type=bool, default=False)
 @click.option('--checkpoint-freq', required=False, type=int, default=1000)
 @click.option('--seed', required=False, type=int, default=1000)
 def main(local_mode: bool, config_file: str, series: int,
-         type_env: str, workload_id: int, round_robin: bool,
-         use_callback: bool, checkpoint_freq: int, seed: int):
+         type_env: str, workload_id: int, workload_type: str,
+         workload_full_path: str, workload_bunch: int,
+         round_robin: bool, use_callback: bool, checkpoint_freq: int,
+         seed: int):
     """[summary]
 
     Args:
@@ -161,8 +178,9 @@ def main(local_mode: bool, config_file: str, series: int,
         type_env (str): the type of the used environment
         dataset_id (int): used cluster dataset
         workload_id (int): the workload used in that dataset
-        network_id (int): edge network of some dataset
-        trace_id (int): user movement traces
+        workload_type (str): the type of the workload
+        workload_full_path (str): full workload foldering paths
+        workload_bunch (int)L: number of workloads given as a bunch
     """
     config_file_path = os.path.join(
         CONFIGS_PATH, 'train', f"{config_file}.json")
@@ -177,6 +195,9 @@ def main(local_mode: bool, config_file: str, series: int,
             config=config, series=series,
             type_env=type_env,
             workload_id=workload_id,
+            workload_type=workload_type,
+            workload_full_path=workload_full_path,
+            workload_bunch=workload_bunch,
             round_robin=round_robin, use_callback=use_callback,
             checkpoint_freq=checkpoint_freq, local_mode=local_mode,
             seed=seed)
