@@ -3,7 +3,7 @@ from smart_vpa.envs import (
     SimEnv,
     KubeEnv
 )
-# from mobile_kube.envs import (
+# from smart_scheduler.envs import (
 #     SimEdgeEnv,
 #     SimBinpackingEnv,
 #     SimGreedyEnv,
@@ -13,9 +13,8 @@ from smart_vpa.envs import (
 # )
 
 # dfined by the user
-DATA_PATH = "/Users/saeid/Codes/smart-vpa/smart-vpa/data"
+DATA_PATH = "/home/cc/smart-vpa/data"
 # generated baesd on the users' path
-DATASETS_PATH = os.path.join("/Users/saeid/Codes/mobile-kube/data", "datasets")
 TRAIN_RESULTS_PATH = os.path.join(DATA_PATH, "train-results")
 TESTS_RESULTS_PATH = os.path.join(DATA_PATH, "test-results")
 
