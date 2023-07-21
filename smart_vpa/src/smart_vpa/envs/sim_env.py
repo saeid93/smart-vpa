@@ -82,31 +82,31 @@ class SimEnv(gym.Env):
         # set up the seeds for reproducable resutls
 
     def setup_next_container(self):
-        self.seed(self.config['seed'][self.current_container])
+        self.seed(self.config['seed'])
         # np.random.seed(self.seed)
         # self.np_random = seeding.np_random(self.seed)
 
         # time variable (for computing clock time in simulation
         # and reading metrics in the emulations)
-        self.time = self.config['time'][self.current_container]
+        self.time = self.config['time']
 
         # container name
-        self.container_name: str = self.config['container_name'][self.current_container]
+        self.container_name: str = self.config['container_name']
 
         # initail resource requests
         self.initial_requests = np.zeros(2)
         self.initial_requests[0] = self.config[
-            'requests'][self.current_container]['memory']
+            'requests']['memory']
         self.initial_requests[1] = self.config[
-            'requests'][self.current_container]['cpu']
+            'requests']['cpu']
         self.requests = self.initial_requests.copy()
 
         # initial resource limits
         self.initial_limits = np.zeros(2)
         self.initial_limits[0] = self.config[
-            'limits'][self.current_container]['memory']
+            'limits']['memory']
         self.initial_limits[1] = self.config[
-            'limits'][self.current_container]['cpu']
+            'limits']['cpu']
         self.limits = self.initial_limits.copy()
 
         # limit ranges
@@ -142,7 +142,7 @@ class SimEnv(gym.Env):
         # resource usage        timestep
         # ram (in megabayes) |    ...     |
         # cpu (in milicores) |    ...     |
-        self.workload: np.array = self.config['workload'][self.current_container]
+        self.workload: np.array = self.config['workload']
         self.total_timesteps = self.workload.shape[1]
         self.timestep = 0
         self.global_timestep = 0
