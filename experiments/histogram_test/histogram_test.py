@@ -2,8 +2,7 @@ from smart_vpa.util import Histogram
 
 # ------------- test histogram option --------------
 #  based-on:
-# https://github.com/kubernetes/autoscaler/blob/
-# master/vertical-pod-autoscaler/pkg/recommender/
+# https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/pkg/recommender/
 # util/histogram_test.go
 
 first_bucket_size = 40.0

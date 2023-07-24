@@ -2,9 +2,7 @@ from smart_vpa.util import Histogram
 
 # ------------- test histogram option --------------
 #  based-on:
-# https://github.com/kubernetes/autoscaler/blob/
-# master/vertical-pod-autoscaler/pkg/recommender/
-# util/decaying_histogram_test.go
+# https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/pkg/recommender/util/decaying_histogram_test.go
 
 first_bucket_size = 1.0
 max_value = 10.0

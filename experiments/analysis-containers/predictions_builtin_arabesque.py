@@ -104,12 +104,14 @@ plt.close()
 
 # plot histogram
 fig_2 = plot_histogram(
-    memory_histogram=recommender.memory_histogram,
+    # memory_histogram=recommender.memory_histogram,
     histogram=recommender.cpu_histogram,
-    last_bucket_memory=10,
-    last_bucket=39,
-    width=0.01,
-    width_memory=0.01
+    # last_bucket_memory=10,
+    # last_bucket=39,
+    # width=0.01,
+    # width_memory=0.01
+    title="cpu_histogram",
+    x_label="cpu",
 )
 fig_2.savefig('pic_histogram.png')
 plt.close()
