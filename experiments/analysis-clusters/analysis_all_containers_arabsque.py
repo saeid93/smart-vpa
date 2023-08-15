@@ -40,8 +40,6 @@ min_resource = False
 
 # per containers stats
 # Make two pandas dataframe/dictionary and add all stats
-
-
 def builtin(workload: np.array, time: np.array):
     recommendations_memory = []
     recommendations_cpu = []
